@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./js/scripts.js" type="module"></script>
+    <link rel="stylesheet" href="./css/estilos.css">
+    <title>Lista dinamica</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Lista dinamica</h1>
+        <form>
+            <input type="text" name="nombre" placeholder="Ingrese nombre: " required><br><br>
+            <input type="email" name="email" placeholder="Ingrese e-mail: " required><br><br>
+            <input type="hidden" name="id">
+            <fieldset>
+                <legend>Genero</legend>
+                <input type="radio" name="sexo" value="Masculino" checked>Masculino <br>
+                <input type="radio" name="sexo" value="Femenino">Femenino <br>
+            </fieldset>
+            <input type="submit" id="btnSubmit" value="Alta Persona"> 
+            <input type="button" id="btnEliminar" class="oculto" value="Eliminar"> 
+        </form>
+        <!-- Ya no lo necesito mas al btn-->
+        <!-- <button id="btnLista" class ="oculto">Crear Lista</button> -->
+        <div id ="spinner-container"></div>
+        <div id="divLista">
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+{
+  "cocineros": [
+    {
+      "nombre": "Damian KUCKY",
+      "especialidad": "Sushi",
+      "id": 1
+    },
+    {
+      "nombre": "Damian",
+      "especialidad": "pATO",
+      "id": 2
+    },
+    {
+      "nombre": "DaniModified",
+      "especialidad": "Esparragos",
+      "id": 4
+    },
+    {
+      "nombre": "Chepi",
+      "especialidad": "Esparragos",
+      "id": 5
+    },
+    {
+      "nombre": "Damian KUCKY EL MAS PICANTE",
+      "especialidad": "Sushi",
+      "id": 6
+    },
+    {
+      "nombre": "Damian KUC",
+      "especialidad": "Sushi",
+      "id": 7
+    },
+    {
+      "nombre": "Damian KUC",
+      "especialidad": "Sushi",
+      "id": 8
+    }
+  ]
+}

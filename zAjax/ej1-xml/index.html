@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>Document</title>
+</head>
+<body >
+    <button onclick='getCocineros()'>Traer</button>
+    <button onclick='getDatosFetch()'>Traer Fetch</button>
+    <button onclick='getDatosAsync()'>Traer Async</button>
+    <button onclick='getDatosAxios()'>Traer Axios</button>
+    <button onclick='getDatosAxiosAsync()'>Traer Axios Async</button>
+    <button onclick='altaCocineros()'>Alta Cocinero</button>
+    <button onclick='deleteCocinero()'>Eliminar Cocinero</button>
+    <button onclick='updateCocinero()'>Update Cocinero</button>
+    <button onclick='postCocinerosFetch()'>CrearDatosFetch</button>
+    <button onclick='deleteCocinerosFetch()'>deleteCocinerosFetch</button>
+    <button onclick='updateCocinerosFetch()'>updateCocinerosFetch</button>
+    <button onclick='postDatosAxios()'>postDatosAxios</button>
+    <button onclick='putDatosAxios()'>putDatosAxios</button>
+    <button onclick='deleteDatosAxios()'>deleteDatosAxios</button>
+
+
+    <style>
+        .spinner{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 300px;
+            background-color: aqua;
+        }
+    </style>
+
+    <div class="spinner">
+        
+    </div>
+    
+    <script> 
+
+        /*
+        1ro - en la carpeta del proyecto le damos 
+            npm install -g json-server
+
+        2do -     Para permitir ejecucion de scripts
+                    -> Set-ExecutionPolicy Unrestricted
+         
+        3ro - json-server -w -d 2000 -p 5000 ./db/db.json
+
+        PD : si sale error es porque no abri el visual code como 
+        administrador.
+
+         */
+
+        let data = [];
+
+        const createSpinner=()=>{
+                const spinner = document.createElement('img');
+                spinner.setAttribute('src',"./assets/spinner.gif");
+                spinner.setAttribute('alt',"imagen spinner");
+                return spinner;
+        }
+       
+        const getCocineros = ()=>{
+
+        // 4 PASOS PARA HACER UNA PETICION DE AJAX
+
+            //Instanciamos el objeto httprequest
+            const xhr = new XMLHttpRequest();
+
+            document.querySelector(".spinner").appendChild(createSpinner());
+            //asignar un handler para la peticion
+            xhr.onreadystatechange= ()=>{
+
+                if(xhr.readyState == 4){
+                    if(xhr.status >= 200 && xhr.status <299){
+                        data = JSON.parse(xhr.responseText);
+                        console.log(data);
+                    }else{
+                        
+                        const statusText = xhr.statusText || "Ocurrio un error";
+                        console.error(`Error : ${xhr.status} : ${statusText}`);
+                    }
+                    document.querySelector(".spinner").removeChild(document.querySelector(".spinner").firstElementChild);
+                }  
+            };
+            //abrir la pticion , true == asincrono
+            xhr.open("GET","http://localhost:5000/cocineros");
+            // enviar la request
+            xhr.send();
+
+        };
+
+        const getDatosFetch = ()=>{
+            
+            document.querySelector(".spinner").appendChild(createSpinner());
+            
+            fetch("http://localhost:5000/cocineros")
+            .then((res)=>{
+               return res.ok? res.json():Promise.reject(res);
+            })
+            .then((data)=>{
+                    console.log(data);
+                })
+            .catch((err)=>{
+                colsole.error(`Errooor: ${err.status}:${err.statusText}`);
+            })
+            .finally(()=>{
+                document.querySelector(".spinner").removeChild(document.querySelector(".spinner").firstElementChild);
+            });
+        };
+
+        const getDatosAsync = async()=>{
+
+            document.querySelector(".spinner").appendChild(createSpinner());
+
+            try {
+                const res = await  fetch("http://localhost:5000/cocineros");
+                 
+                if(!res.ok){
+                        throw new Error("Ocurrio un error");
+                    }
+
+                data = await res.json();
+                console.log(data);
+
+            } catch (error) { 
+                console.log(error);
+            }finally{
+                document.querySelector(".spinner").removeChild(document.querySelector(".spinner").firstElementChild);
+            }
+        };
+
+        const getDatosAxios = ()=>{
+
+            document.querySelector(".spinner").appendChild(createSpinner());
+
+            axios.get("http://localhost:5000/cocineros")
+            .then((res)=>{
+                data = res.data;
+                console.log(res);
+            })
+            .catch((err)=>{
+                console.log(err.respose);
+            })
+            .finally(()=>{
+                document.querySelector(".spinner").removeChild(document.querySelector(".spinner").firstElementChild);
+            });
+
+        };
+
+        const getDatosAxiosAsync = async ()=>{
+
+            document.querySelector(".spinner").appendChild(createSpinner());
+
+            try {
+                const {data} = await axios.get("http://localhost:5000/cocineros");
+                console.log(data);
+
+            } catch (err) {
+                console.log(err.response);
+            }finally{
+                document.querySelector(".spinner").removeChild(document.querySelector(".spinner").firstElementChild);
+            }
+        };
+
+        const altaCocineros = ()=>{
+
+                const nuevoCocinero = {
+                    nombre : "Chepi",
+                    especialidad : "Esparragos"
+                };
+            
+                const xhr = new XMLHttpRequest();
+
+                document.querySelector(".spinner").appendChild(createSpinner());
+               
+                xhr.onreadystatechange= ()=>{
+
+                    if(xhr.readyState == 4){
+                        if(xhr.status >= 200 && xhr.status <299){
+                            data = JSON.parse(xhr.responseText);
+                            console.log(data);
+                        }else{
+                            
+                            const statusText = xhr.statusText || "Ocurrio un error";
+                            console.error(`Error : ${xhr.status} : ${statusText}`);
+                        }
+                        document.querySelector(".spinner").removeChild(document.querySelector(".spinner").firstElementChild);
+                    }  
+                };
+                
+                //setteamos las cabeceras
+                xhr.open("POST","http://localhost:5000/cocineros");
+                xhr.setRequestHeader("Content-Type","application/json;charset = utf-8");
+                xhr.send(JSON.stringify(nuevoCocinero));
+
+            };
+            
+        const deleteCocinero = ()=>{
+
+                let id = 3 ;
+                const xhr = new XMLHttpRequest();
+
+                document.querySelector(".spinner").appendChild(createSpinner());
+
+                xhr.onreadystatechange= ()=>{
+
+                    if(xhr.readyState == 4){
+                        if(xhr.status >= 200 && xhr.status <299){
+                            data = JSON.parse(xhr.responseText);
+                            console.log(data);
+                        }else{
+                            
+                            const statusText = xhr.statusText || "Ocurrio un error";
+                            console.error(`Error : ${xhr.status} : ${statusText}`);
+                        }
+                        document.querySelector(".spinner").removeChild(document.querySelector(".spinner").firstElementChild);
+                    }  
+                };
+
+                //setteamos las cabeceras
+                xhr.open("DELETE",`http://localhost:5000/cocineros/${id}`);
+                xhr.send();
+
+                };
+
+        const updateCocinero = ()=>{
+
+                    const cocineroUpdate = {
+                        nombre : "DaniModified",
+                        especialidad : "Esparragos"
+                    };
+
+                    const xhr = new XMLHttpRequest();
+
+                    document.querySelector(".spinner").appendChild(createSpinner());
+
+                    xhr.onreadystatechange= ()=>{
+
+                        if(xhr.readyState == 4){
+                            if(xhr.status >= 200 && xhr.status <299){
+                                data = JSON.parse(xhr.responseText);
+                                console.log(data);
+                            }else{
+                                
+                                const statusText = xhr.statusText || "Ocurrio un error";
+                                console.error(`Error : ${xhr.status} : ${statusText}`);
+                            }
+                            document.querySelector(".spinner").removeChild(document.querySelector(".spinner").firstElementChild);
+                        }  
+                    };
+
+                    //setteamos las cabeceras
+                    xhr.open("PUT","http://localhost:5000/cocineros/"+"4");
+                    xhr.setRequestHeader("Content-Type","application/json;charset = utf-8");
+                    xhr.send(JSON.stringify(cocineroUpdate));
+                    };
+
+
+            const postCocinerosFetch = ()=>{
+
+                const nuevoCocinero = {
+                        nombre : "NuevoUser",
+                        especialidad : "Milanesas"
+                    };
+
+
+                const options = {
+                    method:"POST",
+                    headers:{
+                        "Content-Type":"application/json;charset = utf-8"
+                    },
+                    body:JSON.stringify(nuevoCocinero)
+                };
+                    
+                    document.querySelector(".spinner").appendChild(createSpinner());
+                    
+                    fetch("http://localhost:5000/cocineros/",options)
+                    .then((res)=>{
+                    return res.ok? res.json():Promise.reject(res);
+                    })
+                    .then((data)=>{
+                            console.log(data);
+                        })
+                    .catch((err)=>{
+                        colsole.error(`Errooor: ${err.status}:${err.statusText}`);
+                    })
+                    .finally(()=>{
+                        document.querySelector(".spinner").removeChild(document.querySelector(".spinner").firstElementChild);
+                    });
+                };
+
+                const deleteCocinerosFetch = ()=>{
+
+                    const options = {
+                        method:"DELETE"
+                    };
+                        
+                        document.querySelector(".spinner").appendChild(createSpinner());
+                        
+                        fetch("http://localhost:5000/cocineros/" + 6,{method:"DELETE"})
+                        .then((res)=>{
+                        return res.ok? res.json():Promise.reject(res);
+                        })
+                        .then((data)=>{
+                                console.log(data);
+                            })
+                        .catch((err)=>{
+                            colsole.error(`Errooor: ${err.status}:${err.statusText}`);
+                        })
+                        .finally(()=>{
+                            document.querySelector(".spinner").removeChild(document.querySelector(".spinner").firstElementChild);
+                        });
+                    };
+                    
+
+                    const updateCocinerosFetch = ()=>{
+
+                            const modCocinero = {
+                                    nombre : "Damian",
+                                    especialidad : "pATO"
+                                };
+
+
+                            const options = {
+                                method:"PUT",
+                                headers:{
+                                    "Content-Type":"application/json;charset = utf-8"
+                                },
+                                body:JSON.stringify(modCocinero)
+                            };
+                                
+                                document.querySelector(".spinner").appendChild(createSpinner());
+                                
+                                fetch("http://localhost:5000/cocineros/"+ 2 ,options)
+                                .then((res)=>{
+                                return res.ok? res.json():Promise.reject(res);
+                                })
+                                .then((data)=>{
+                                        console.log(data);
+                                    })
+                                .catch((err)=>{
+                                    colsole.error(`Errooor: ${err.status}:${err.statusText}`);
+                                })
+                                .finally(()=>{
+                                    document.querySelector(".spinner").removeChild(document.querySelector(".spinner").firstElementChild);
+                                });
+                            };
+
+
+                        const postDatosAxios = ()=>{
+
+                            const nuevoCocinero = {
+                            nombre : "Damian KUC",
+                            especialidad : "Sushi"
+                            };
+
+                            document.querySelector(".spinner").appendChild(createSpinner());
+
+                            axios.post("http://localhost:5000/cocineros",nuevoCocinero)
+                            .then((res)=>{
+                                data = res.data;
+                                console.log(res);
+                            })
+                            .catch((err)=>{
+                                console.log(err.respose);
+                            })
+                            .finally(()=>{
+                                document.querySelector(".spinner").removeChild(document.querySelector(".spinner").firstElementChild);
+                            });
+
+                            };
+
+
+
+                        const putDatosAxios = ()=>{
+
+
+                            document.querySelector(".spinner").appendChild(createSpinner());
+
+                            axios.put("http://localhost:5000/cocineros/"+1,{nombre : "Damian KUCKY EL MAS PICANTE",especialidad : "Sushi"})
+                            .then((res)=>{
+                                data = res.data;
+                                console.log(res);
+                            })
+                            .catch((err)=>{
+                                console.log(err.respose);
+                            })
+                            .finally(()=>{
+                                document.querySelector(".spinner").removeChild(document.querySelector(".spinner").firstElementChild);
+                            });
+
+                            };
+
+                        const deleteDatosAxios = ()=>{
+
+                            document.querySelector(".spinner").appendChild(createSpinner());
+
+                            axios
+                            .delete("http://localhost:5000/cocineros/"+8)
+                            .then((res)=>{
+                                data = res.data;
+                                console.log(res);
+                            })
+                            .catch((err)=>{
+                                console.log(err.respose);
+                            })
+                            .finally(()=>{
+                                document.querySelector(".spinner").removeChild(document.querySelector(".spinner").firstElementChild);
+                            });
+
+                            };
+
+
+                
+                                          
+
+
+
+    </script>
+</body>
+</html>

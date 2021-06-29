@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./js/scripts.js" type="module"></script>
+    <link rel="stylesheet" href="./css/estilos.css">
+    <title>Bienes Raices</title>
+</head>
+    <h1>Llena el formulario de Alta</h1>
+<body>
+    <div class="container">
+    <form>
+        <fieldset>
+            <legend>Informacion del Anuncio</legend>
+
+            <input type="hidden" name="id">
+
+            <h3>Titulo</h3>
+
+            <input type="text" name="titulo" placeholder="Titulo" required><br><br>
+
+            <h3>Transaccion</h3>
+            Venta <input type="radio"  name="transaccion" value="Venta"><br>
+            Alquiler <input type="radio" name="transaccion" value="Alquiler"><br>
+
+            <h3>Descripcion</h3>
+            <input type="text" name="descripcion" placeholder="Descripcion" required><br><br>
+
+            <h3>Precio</h3>
+            <input type="number" name="precio" step="0.01"  placeholder="Precio" required><br><br>
+
+            <h3>Cantidad de Baños</h3>
+            <input type="number" name="baños" placeholder="Baños" required><br><br>
+
+            <h3>Cantidad de Autos</h3>
+            <input type="number" name="num_estacionamiento" placeholder="Cantidad Autos" required><br><br>
+
+            <h3>Cantidad de Dormitorios</h3>
+            <input type="number" name="num_dormitorio" placeholder="Dormitorios" required><br><br>
+
+        </fieldset>
+        <input type="submit" id="btnSubmit" value="Guardar"> 
+        <input type="button" id="btnEliminar" class="oculto" value="Eliminar" > 
+
+    </form>
+
+    <div id ="spinner-container"></div>
+    <div id="divLista"></div>
+</div>
+</body>
+</html>
